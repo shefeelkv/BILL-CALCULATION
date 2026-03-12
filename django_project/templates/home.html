@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-lg-10 mx-auto text-center mt-5">
+    <div class="mb-5">
+        <h1 class="display-3 fw-bold mb-3 text-dark">Simplify Your Business with <span
+                style="color: var(--ww-secondary);">WISEWAX</span></h1>
+        <p class="lead text-secondary mb-5 w-75 mx-auto">Generate professional invoices and manage your smart notes with
+            the most elegant solution on the market.</p>
+
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'signup' %}" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-lg">Get Started
+                Free</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-5 py-3 rounded-pill">Login</a>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-5">
+        <div class="col-md-4">
+            <div class="card p-4 h-100 border-0 bg-white">
+                <div class="mb-3 text-primary"><i class="fas fa-shield-alt fa-3x"></i></div>
+                <h4 class="fw-bold">Secure Data</h4>
+                <p class="text-muted">Your data is isolated and encrypted. Only you have access to your financials.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 h-100 border-0 bg-white">
+                <div class="mb-3 text-warning"><i class="fas fa-bolt fa-3x"></i></div>
+                <h4 class="fw-bold">Lightning Fast</h4>
+                <p class="text-muted">Create invoices in seconds. Download PDFs instantly. No lag, just performance.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 h-100 border-0 bg-white">
+                <div class="mb-3 text-info"><i class="fas fa-magic fa-3x"></i></div>
+                <h4 class="fw-bold">Smart Automation</h4>
+                <p class="text-muted">Automatic calculations and professional formatting make you look good.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

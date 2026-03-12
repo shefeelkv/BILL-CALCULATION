@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-lg-10 mx-auto">
+    <div class="card p-4">
+        <div class="d-flex justify-content-between mb-4">
+            <h2>{% if bill %}Edit Bill #{{ bill.id }}{% else %}New Bill{% endif %}</h2>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+
+        <form method="post" id="billForm">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="form-label">Customer Name</label>
+                <input type="text" name="customer_name" class="form-control form-control-lg"
+                    value="{{ bill.customer_name }}" required>
+            </div>
+
+            <h4 class="mb-3">Items</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="table-light">
+                        <th>Product / Service</th>
+                        <th width="150">Qty</th>
+                        <th width="150">Rate ($)</th>
+                        <th width="150">Amount ($)</th>
+                        <th width="50"></th>
+                    </tr>
+                </thead>
+                <tbody id="itemsBody">
+                    {% if bill %}
+                    {% for item in bill.items.all %}
+                    <tr>
+                        <td><input type="text" name="product_name[]" class="form-control"
+                                value="{{ item.product_name }}" required></td>
+                        <td><input type="number" name="quantity[]" class="form-control qty" value="{{ item.quantity }}"
+                                required min="1"></td>
+                        <td><input type="number" name="rate[]" class="form-control rate" value="{{ item.rate }}"
+                                required step="0.01"></td>
+                        <td><input type="text" class="form-control amount" value="{{ item.amount }}" readonly></td>
+                        <td><button type="button" class="btn btn-danger btn-sm remove-row">×</button></td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <!-- Empty Row for New Bill -->
+                    <tr>
+                        <td><input type="text" name="product_name[]" class="form-control" required></td>
+                        <td><input type="number" name="quantity[]" class="form-control qty" value="1" required min="1">
+                        </td>
+                        <td><input type="number" name="rate[]" class="form-control rate" value="0" required step="0.01">
+                        </td>
+                        <td><input type="text" class="form-control amount" value="0.00" readonly></td>
+                        <td><button type="button" class="btn btn-danger btn-sm remove-row">×</button></td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-light mb-4 text-primary" id="addRow">+ Add Item</button>
+
+            <div class="d-flex justify-content-end align-items-center gap-3 border-t pt-3">
+                <h3 class="mb-0">Total: $<span id="grandTotal">0.00</span></h3>
+                <button type="submit" class="btn btn-primary btn-lg">Save Bill</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const tbody = document.getElementById('itemsBody');
+        const totalSpan = document.getElementById('grandTotal');
+
+        const calculateRow = (row) => {
+            const qty = parseFloat(row.querySelector('.qty').value) || 0;
+            const rate = parseFloat(row.querySelector('.rate').value) || 0;
+            const amount = qty * rate;
+            row.querySelector('.amount').value = amount.toFixed(2);
+            return amount;
+        };
+
+        const calculateTotal = () => {
+            let total = 0;
+            document.querySelectorAll('#itemsBody tr').forEach(row => {
+                total += calculateRow(row);
+            });
+            totalSpan.textContent = total.toFixed(2);
+        };
+
+        // Event Delegation for Inputs
+        tbody.addEventListener('input', (e) => {
+            if (e.target.matches('.qty') || e.target.matches('.rate')) {
+                calculateTotal();
+            }
+        });
+
+        // Add Row
+        document.getElementById('addRow').addEventListener('click', () => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" name="product_name[]" class="form-control" required></td>
+                <td><input type="number" name="quantity[]" class="form-control qty" value="1" required min="1"></td>
+                <td><input type="number" name="rate[]" class="form-control rate" value="0" required step="0.01"></td>
+                <td><input type="text" class="form-control amount" value="0.00" readonly></td>
+                <td><button type="button" class="btn btn-danger btn-sm remove-row">×</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        // Remove Row
+        tbody.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-row')) {
+                if (tbody.children.length > 1) {
+                    e.target.closest('tr').remove();
+                    calculateTotal();
+                }
+            }
+        });
+
+        // Initial Calc
+        calculateTotal();
+    });
+</script>
+{% endblock %}

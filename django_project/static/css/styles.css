@@ -1,0 +1,337 @@
+/* WISEWAXPRO Corporate Design System */
+:root {
+    /* Color Palette - Slate & Blue Theme */
+    --ww-primary: #0f172a;
+    /* Slate 900 - Sidebar, Headings */
+    --ww-primary-light: #1e293b;
+    /* Slate 800 - Sidebar Hover */
+    --ww-accent: #3b82f6;
+    /* Blue 500 - Actions, Links */
+    --ww-accent-hover: #2563eb;
+    /* Blue 600 */
+    --ww-bg: #f1f5f9;
+    /* Slate 100 - Main Background */
+    --ww-card-bg: #ffffff;
+    --ww-text: #334155;
+    /* Slate 700 - Body Text */
+    --ww-text-muted: #64748b;
+    /* Slate 500 */
+    --ww-border: #e2e8f0;
+    /* Slate 200 */
+
+    /* Status Colors */
+    --ww-success: #10b981;
+    /* Emerald 500 */
+    --ww-warning: #f59e0b;
+    /* Amber 500 */
+    --ww-danger: #ef4444;
+    /* Red 500 */
+
+    /* Dimensions */
+    --sidebar-width: 260px;
+    --header-height: 70px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--ww-bg);
+    color: var(--ww-text);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Outfit', sans-serif;
+    color: var(--ww-primary);
+    font-weight: 700;
+}
+
+a {
+    text-decoration: none;
+    color: var(--ww-accent);
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: var(--ww-accent-hover);
+}
+
+/* --- Sidebar --- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: var(--sidebar-width);
+    background-color: var(--ww-primary);
+    color: white;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    padding-top: 1.5rem;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
+}
+
+.brand-logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white !important;
+    padding: 0 1.5rem;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    letter-spacing: 0.5px;
+}
+
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.9rem 1.5rem;
+    color: #94a3b8;
+    /* Slate 400 */
+    font-weight: 500;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.sidebar .nav-link.active {
+    background-color: rgba(59, 130, 246, 0.1);
+    /* Blue tint */
+    color: var(--ww-accent);
+    border-left-color: var(--ww-accent);
+}
+
+.sidebar .nav-link i {
+    width: 24px;
+    text-align: center;
+}
+
+/* --- Main Layout --- */
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Topbar --- */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid transparent;
+    /* Placeholder for sticky header if needed */
+}
+
+.page-title {
+    font-size: 1.75rem;
+    margin: 0;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: white;
+    padding: 8px 16px;
+    border-radius: 50px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--ww-border);
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    background-color: var(--ww-accent);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* --- Components --- */
+
+/* Cards */
+.card {
+    background: var(--ww-card-bg);
+    border: 1px solid var(--ww-border);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--ww-border);
+    padding: 1.25rem 1.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 8px;
+    padding: 0.6rem 1.25rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--ww-accent);
+    border-color: var(--ww-accent);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: var(--ww-accent-hover);
+    border-color: var(--ww-accent-hover);
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+}
+
+.btn-outline-primary {
+    color: var(--ww-accent);
+    border-color: var(--ww-accent);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--ww-accent);
+    color: white;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    border-radius: 8px;
+    border: 1px solid var(--ww-border);
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--ww-accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--ww-primary);
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Tables */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: #f8fafc;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--ww-text-muted);
+    border-bottom: 2px solid var(--ww-border);
+    padding: 1rem 1.5rem;
+}
+
+.table tbody td {
+    padding: 1rem 1.5rem;
+    color: var(--ww-text);
+    border-bottom: 1px solid var(--ww-border);
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Badges */
+.badge {
+    padding: 0.5em 0.8em;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-content {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        left: -var(--sidebar-width);
+        transition: left 0.3s ease-in-out;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 1.5rem 1rem;
+    }
+
+    .topbar {
+        margin-bottom: 1.5rem;
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.5);
+        /* Slate 900 opacity */
+        z-index: 999;
+        backdrop-filter: blur(2px);
+    }
+
+    .sidebar-overlay.show {
+        display: block;
+    }
+}

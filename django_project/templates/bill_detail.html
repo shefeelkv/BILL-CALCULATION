@@ -1,0 +1,192 @@
+{% extends 'base_app.html' %}
+{% load humanize %}
+
+{% block page_title %}Invoice Details{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Invoice Specific Styles */
+    .invoice-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 40px;
+        border: 1px solid #e2e8f0;
+        /* Light border for screen */
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .invoice-header {
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+
+    .invoice-logo {
+        font-family: 'Outfit', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e40af;
+        /* WW Primary Dark */
+    }
+
+    .invoice-meta-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: #64748b;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .invoice-meta-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .invoice-table th {
+        background-color: #f8fafc !important;
+        border-bottom: 2px solid #cbd5e1 !important;
+        color: #475569;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+    }
+
+    .invoice-total-row td {
+        background-color: #f8fafc;
+        border-top: 2px solid #cbd5e1;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #0f172a;
+    }
+
+    /* Print Styles */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        .sidebar,
+        .topbar,
+        .invoice-actions {
+            display: none !important;
+        }
+
+        .invoice-container {
+            border: none;
+            box-shadow: none;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .invoice-container,
+        .invoice-container * {
+            visibility: visible;
+        }
+
+        .main-content {
+            margin: 0;
+            padding: 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Action Buttons (Hidden on Print) -->
+<div class="row mb-4 invoice-actions">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <a href="{% url 'bill_list' %}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-2"></i> Back to
+            Bills</a>
+        <div class="btn-group">
+            <button onclick="window.print()" class="btn btn-primary"><i class="fas fa-print me-2"></i> Print / Download
+                PDF</button>
+            <a href="{% url 'edit_bill' bill.id %}" class="btn btn-outline-primary"><i class="fas fa-edit me-2"></i>
+                Edit</a>
+            <a href="{% url 'delete_bill' bill.id %}" class="btn btn-outline-danger"><i class="fas fa-trash me-2"></i>
+                Delete</a>
+        </div>
+    </div>
+</div>
+
+<!-- Invoice Document -->
+<div class="invoice-container">
+    <!-- Header -->
+    <div class="invoice-header d-flex justify-content-between align-items-start">
+        <div>
+            <div class="invoice-logo"><i class="fa-solid fa-crown me-2"></i>WISEWAX</div>
+            <div class="text-muted small mt-1">Smart Financial Tracking</div>
+        </div>
+        <div class="text-end">
+            <h2 class="text-uppercase text-secondary fw-bold" style="letter-spacing: 2px; opacity: 0.3;">Invoice</h2>
+        </div>
+    </div>
+
+    <!-- Meta Data -->
+    <div class="row mb-5">
+        <div class="col-sm-6">
+            <div class="mb-4">
+                <div class="invoice-meta-label">Bill To:</div>
+                <div class="invoice-meta-value fs-4">{{ bill.customer_name }}</div>
+            </div>
+        </div>
+        <div class="col-sm-6 text-end">
+            <div class="mb-2">
+                <span class="invoice-meta-label me-2">Invoice #:</span>
+                <span class="invoice-meta-value">INV-{{ bill.id|stringformat:"04d" }}</span>
+            </div>
+            <div class="mb-2">
+                <span class="invoice-meta-label me-2">Date:</span>
+                <span class="invoice-meta-value">{{ bill.created_at|date:"F d, Y" }}</span>
+            </div>
+            <div>
+                <span class="invoice-meta-label me-2">Created By:</span>
+                <span class="invoice-meta-value">{{ bill.user.username }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Items Table -->
+    <table class="table invoice-table mb-4">
+        <thead>
+            <tr>
+                <th style="width: 5%;">#</th>
+                <th style="width: 50%;">Item Description</th>
+                <th class="text-center" style="width: 15%;">Qty</th>
+                <th class="text-end" style="width: 15%;">Rate</th>
+                <th class="text-end" style="width: 15%;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in bill.items.all %}
+            <tr>
+                <td class="text-muted">{{ forloop.counter }}</td>
+                <td class="fw-bold text-dark">{{ item.product_name }}</td>
+                <td class="text-center">{{ item.quantity }}</td>
+                <td class="text-end">${{ item.rate|stringformat:".2f" }}</td>
+                <td class="text-end fw-bold">${{ item.amount|stringformat:".2f" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="invoice-total-row">
+                <td colspan="4" class="text-end text-uppercase text-muted small pe-4 pt-3">Grand Total</td>
+                <td class="text-end pt-3 text-primary">${{ bill.total_amount|stringformat:".2f"|intcomma }}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- Footer -->
+    <div class="mt-5 text-center text-muted small border-top pt-4">
+        <p class="mb-1">Thank you for your business!</p>
+        <p>Generated securely by <strong>WISEWAX</strong> Platform.</p>
+    </div>
+</div>
+{% endblock %}

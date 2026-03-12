@@ -1,0 +1,257 @@
+/* Corporate Admin Theme Overrides */
+
+/* Logo Customization */
+.brand-link .brand-image {
+    display: none !important;
+    /* Hide default image if any */
+}
+
+.brand-link .fa-wolf-pack-battalion {
+    font-size: 1.5rem;
+    margin-right: 10px;
+    color: #f59e0b;
+    /* Amount Gold */
+}
+
+/* General Layout */
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif !important;
+    background-color: #f4f6f9 !important;
+}
+
+/* Card Styling for Dashboard & Models */
+.card {
+    border: none !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Sidebar Customization */
+.main-sidebar {
+    background-color: #1e293b !important;
+    /* Dark Slate Blue */
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.nav-sidebar .nav-item .nav-link.active {
+    background-color: #3b82f6 !important;
+    /* Professional Blue */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    font-weight: 600;
+}
+
+.nav-sidebar .nav-link {
+    color: #cbd5e1 !important;
+    /* Light Grey Text */
+}
+
+.nav-sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Header / Navbar */
+.main-header {
+    border-bottom: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #0f172a !important;
+    /* Navy */
+    border-color: #0f172a !important;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: #1e293b !important;
+    transform: translateY(-1px);
+}
+
+/* Tables */
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table thead th {
+    background-color: #f8fafc !important;
+    color: #475569 !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e2e8f0 !important;
+    padding: 12px 16px !important;
+}
+
+.table tbody td {
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding: 12px 16px !important;
+    vertical-align: middle;
+    color: #334155;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8fafc !important;
+}
+
+/* Dashboard Widegets (App List) */
+.col-lg-3 .small-box,
+.col-lg-4 .small-box,
+.col-md-6 .small-box {
+    border-radius: 12px !important;
+    background: white !important;
+    color: #1e293b !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    margin-bottom: 20px !important;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.small-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+    border-color: #cbd5e1;
+}
+
+.small-box .icon {
+    color: #f1f5f9 !important;
+    opacity: 1 !important;
+    font-size: 80px !important;
+    top: -10px !important;
+    right: -10px !important;
+    transform: rotate(15deg);
+}
+
+.small-box:hover .icon {
+    color: #e2e8f0 !important;
+    font-size: 85px !important;
+}
+
+.small-box .inner h3 {
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+    color: #0f172a;
+    margin-bottom: 5px;
+}
+
+.small-box .inner p {
+    font-size: 0.9rem !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.small-box-footer {
+    background: #f8fafc !important;
+    color: #0ea5e9 !important;
+    font-weight: 600 !important;
+    border-top: 1px solid #e2e8f0;
+    padding: 8px 0 !important;
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+}
+
+.small-box-footer:hover {
+    background: #f1f5f9 !important;
+    color: #0284c7 !important;
+}
+
+/* Recent Actions Sidebar */
+#content-related {
+    background: white !important;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-right: 0 !important;
+}
+
+#content-related h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.actionlist {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.actionlist li {
+    list-style: none;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 12px 0;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.actionlist li:last-child {
+    border-bottom: none;
+}
+
+.actionlist .text-muted {
+    font-size: 0.8rem;
+    margin-left: auto;
+}
+
+/* Main Content Area */
+.content-wrapper {
+    background-color: #f8fafc !important;
+}
+
+.content-header h1 {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    font-size: 1.8rem !important;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+    background: transparent !important;
+    padding: 0 !important;
+    margin-top: 5px;
+}
+
+.breadcrumb-item a {
+    color: #64748b !important;
+    font-weight: 500;
+}
+
+.breadcrumb-item.active {
+    color: #94a3b8 !important;
+}
+
+/* Dashboard Widgets */
+.small-box {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+    overflow: hidden;
+}
+
+.small-box .inner {
+    padding: 20px !important;
+}
+
+.small-box h3 {
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+.small-box p {
+    font-size: 1.1rem;
+    font-weight: 500;
+}

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.class
+venv/
+env/
+.env
+
+# SQLite
+*.sqlite3
+
+# Node/React
+node_modules/
+dist/
+build/
+.next/
+out/
+.vercel/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,80 @@
+{% extends 'base_app.html' %}
+{% load humanize %}
+
+{% block page_title %}Add Transaction{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-light py-3">
+                <h6 class="mb-0 fw-bold text-primary">{{ chit.name }} - Balance: &#8377; {{
+                    chit.current_balance|floatformat:2|intcomma }}</h6>
+            </div>
+            <div class="card-body p-4">
+
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small text-uppercase fw-bold">Type</label>
+                        {{ form.transaction_type }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small text-uppercase fw-bold">Amount (&#8377;)</label>
+                        {{ form.amount }}
+                    </div>
+
+                    <!-- Description Field Container -->
+                    <div class="mb-4" id="description-container" style="display: none;">
+                        <label class="form-label text-muted small text-uppercase fw-bold">Description</label>
+                        {{ form.description }}
+                        <div class="form-text text-danger">* Required for withdrawals.</div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary fw-bold py-2">Save Transaction</button>
+                        <a href="{% url 'chit_detail' chit.id %}"
+                            class="btn btn-outline-secondary fw-bold py-2">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const typeSelect = document.getElementById('id_transaction_type');
+        const descContainer = document.getElementById('description-container');
+        const descInput = document.getElementById('id_description');
+
+        function toggleDescription() {
+            if (typeSelect.value === 'WITHDRAW') {
+                descContainer.style.display = 'block';
+                descInput.setAttribute('required', 'required');
+            } else {
+                descContainer.style.display = 'none';
+                descInput.removeAttribute('required');
+                descInput.value = ''; // Clear it if hiding
+            }
+        }
+
+        // Initial check
+        toggleDescription();
+
+        // Listener
+        typeSelect.addEventListener('change', toggleDescription);
+    });
+</script>
+{% endblock %}

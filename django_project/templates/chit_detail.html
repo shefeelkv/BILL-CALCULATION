@@ -1,0 +1,160 @@
+{% extends 'base_app.html' %}
+{% load humanize %}
+
+{% block page_title %}{{ chit.name }}{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Main Stats -->
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 mb-4 bg-primary text-white">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h6 class="text-white-50 text-uppercase fw-bold small">Current Balance</h6>
+                        <h1 class="display-4 fw-bold mb-0" id="currentBalance" data-value="{{ chit.current_balance|stringformat:'.2f' }}">&#8377; {{ chit.current_balance|floatformat:2|intcomma }}
+                        </h1>
+                    </div>
+                    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                        <div class="d-flex justify-content-md-end gap-2">
+                            <a href="{% url 'add_transaction' chit.id %}" class="btn btn-light text-primary fw-bold"><i
+                                    class="fas fa-exchange-alt me-2"></i> Add / Withdraw</a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border-white opacity-25 my-4">
+
+                <div class="row">
+                    <div class="col-4">
+                        <div class="text-white-50 small text-uppercase">Target</div>
+                        <div class="fw-bold fs-5 mb-3" id="targetAmount" data-value="{{ chit.target_amount|stringformat:'.2f' }}">&#8377; {{ chit.target_amount|floatformat:2|intcomma }}</div>
+                        <div class="text-white-50 small text-uppercase" style="white-space: nowrap;">Remaining to Target</div>
+                        <div class="fw-bold fs-5" id="remainingAmount">&#8377; 0.00</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-white-50 small text-uppercase">Date</div>
+                        <div class="fw-bold fs-5">{{ chit.target_date|date:"M d, Y" }}</div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-white-50 small text-uppercase">Status</div>
+                        <div class="fw-bold fs-5">{{ chit.get_status_display }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions -->
+        <h5 class="fw-bold mb-3">Transaction History</h5>
+        <div class="card shadow-sm border-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Date</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th class="text-end pe-4">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in transactions %}
+                        <tr>
+                            <td class="ps-4 text-muted">{{ t.date|date:"M d, Y" }}</td>
+                            <td>{{ t.description|default:"-" }}</td>
+                            <td>
+                                {% if t.transaction_type == 'ADD' %}
+                                <span class="badge bg-success bg-opacity-10 text-success">Added</span>
+                                {% else %}
+                                <span class="badge bg-danger bg-opacity-10 text-danger">Withdrawn</span>
+                                {% endif %}
+                            </td>
+                            <td
+                                class="text-end pe-4 fw-bold {% if t.transaction_type == 'ADD' %}text-success{% else %}text-danger{% endif %}">
+                                {% if t.transaction_type == 'ADD' %}+{% else %}-{% endif %} &#8377; {{ t.amount|floatformat:2|intcomma }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">No transactions yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Info -->
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <h6 class="fw-bold text-muted text-uppercase small mb-3">Progress</h6>
+                <div class="progress mb-2" style="height: 10px;">
+                    <div class="progress-bar {% if chit.status == 'COMPLETED' %}bg-success{% endif %}"
+                        role="progressbar" style="width: {{ chit.progress_percentage }}%"></div>
+                </div>
+                <div class="d-flex justify-content-between small text-muted">
+                    <span>{{ chit.progress_percentage }}%</span>
+                    <span>Goal: &#8377; {{ chit.target_amount|floatformat:2|intcomma }}</span>
+                </div>
+
+                <hr class="my-4 opacity-25">
+
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="fw-bold text-dark fs-4">{{ chit.remaining_days }}</div>
+                        <div class="text-muted small text-uppercase">Days Left</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="fw-bold text-dark fs-4">{{ chit.transactions.count }}</div>
+                        <div class="text-muted small text-uppercase">Txns</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if chit.description %}
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h6 class="fw-bold text-muted text-uppercase small mb-3">Description</h6>
+                <p class="text-secondary small mb-0">{{ chit.description }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function updateRemainingAmount() {
+            const currentBalanceEl = document.getElementById("currentBalance");
+            const targetAmountEl = document.getElementById("targetAmount");
+            const remainingAmountEl = document.getElementById("remainingAmount");
+
+            if (currentBalanceEl && targetAmountEl && remainingAmountEl) {
+                const currentBalance = parseFloat(currentBalanceEl.getAttribute("data-value")) || 0;
+                const targetAmount = parseFloat(targetAmountEl.getAttribute("data-value")) || 0;
+                let remaining = targetAmount - currentBalance;
+                
+                if (remaining < 0) remaining = 0; 
+
+                const formattedRemaining = new Intl.NumberFormat('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(remaining);
+
+                remainingAmountEl.innerHTML = `&#8377; ${formattedRemaining}`;
+            }
+        }
+
+        updateRemainingAmount();
+
+        const currentBalanceEl = document.getElementById("currentBalance");
+        if (currentBalanceEl) {
+            const observer = new MutationObserver(updateRemainingAmount);
+            observer.observe(currentBalanceEl, { attributes: true, attributeFilter: ['data-value'] });
+        }
+    });
+</script>
+{% endblock %}

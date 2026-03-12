@@ -1,0 +1,74 @@
+{% extends 'base_app.html' %}
+
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Profile Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-sm text-center p-4 h-100">
+            <div class="mb-3">
+                <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle text-secondary fw-bold"
+                    style="width: 100px; height: 100px; font-size: 2.5rem;">
+                    {{ request.user.username|make_list|first|upper }}
+                </div>
+            </div>
+            <h4 class="fw-bold mb-1">{{ request.user.get_full_name|default:request.user.username }}</h4>
+            {% if request.user.profile.age %}
+            <p class="text-muted mb-3">{{ request.user.profile.age }} years old</p>
+            {% else %}
+            <p class="text-muted mb-3">Age not set</p>
+            {% endif %}
+
+            <div class="border-top pt-3 text-start">
+                <small class="text-secondary d-block mb-2"><i class="fas fa-calendar-alt me-2"></i> Joined: {{
+                    request.user.date_joined|date:"M d, Y" }}</small>
+        </div>
+    </div>
+
+    <!-- Edit Form -->
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold">Edit Profile</h5>
+            </div>
+            <div class="card-body p-4">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">First Name</label>
+                            <input type="text" class="form-control" name="first_name"
+                                value="{{ request.user.first_name }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">Last Name</label>
+                            <input type="text" class="form-control" name="last_name"
+                                value="{{ request.user.last_name }}">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label text-muted small fw-bold">Age</label>
+                            <input type="number" class="form-control" name="age" value="{{ request.user.profile.age|default_if_none:'' }}">
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
